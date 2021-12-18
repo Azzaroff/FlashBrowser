@@ -10,6 +10,7 @@ const {autoUpdater} = require("electron-updater");
 const path = require('path');
 const Store = require('./store.js');
 const contextMenu = require('electron-context-menu');
+const { ipcMain } = require('electron')
 
 contextMenu({
 	showSaveImageAs: true
@@ -179,7 +180,13 @@ app.on('ready',   () => {
 	globalShortcut.register("CTRL+SHIFT+I", () => {
 	 mainWindow.webContents.openDevTools();
 	});
-	
+
+	function toggleWindowFullScreen(){
+		mainWindow.setFullScreen(!mainWindow.isFullScreen())
+	}
+	globalShortcut.register("F11", toggleWindowFullScreen);
+	ipcMain.on('fs-click', toggleWindowFullScreen);
+
 	globalShortcut.register("CmdOrCtrl+=", () => {
 		console.log("CmdOrCtrl+");
 		mainWindow.webContents.zoomFactor = mainWindow.webContents.getZoomFactor() + 0.2;

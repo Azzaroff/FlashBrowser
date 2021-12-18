@@ -10,33 +10,36 @@
 		</div>
 		-->
     <body>
-		<div id="window-controls">
-			<div class="button" id="min-button">
-				<img class="icon" srcset="icons/min-w-10.png 1x, icons/min-w-12.png 1.25x, icons/min-w-15.png 1.5x, icons/min-w-15.png 1.75x, icons/min-w-20.png 2x, icons/min-w-20.png 2.25x, icons/min-w-24.png 2.5x, icons/min-w-30.png 3x, icons/min-w-30.png 3.5x" draggable="false" />
-			</div>
-			<div class="button" id="max-button">
-				<img class="icon" srcset="icons/max-w-10.png 1x, icons/max-w-12.png 1.25x, icons/max-w-15.png 1.5x, icons/max-w-15.png 1.75x, icons/max-w-20.png 2x, icons/max-w-20.png 2.25x, icons/max-w-24.png 2.5x, icons/max-w-30.png 3x, icons/max-w-30.png 3.5x" draggable="false" />
-			</div>
-			<div class="button" id="restore-button">
-				<img class="icon" srcset="icons/restore-w-10.png 1x, icons/restore-w-12.png 1.25x, icons/restore-w-15.png 1.5x, icons/restore-w-15.png 1.75x, icons/restore-w-20.png 2x, icons/restore-w-20.png 2.25x, icons/restore-w-24.png 2.5x, icons/restore-w-30.png 3x, icons/restore-w-30.png 3.5x" draggable="false" />
-			</div>
-			<div class="button" id="close-button">
-				<img class="icon" srcset="icons/close-w-10.png 1x, icons/close-w-12.png 1.25x, icons/close-w-15.png 1.5x, icons/close-w-15.png 1.75x, icons/close-w-20.png 2x, icons/close-w-20.png 2.25x, icons/close-w-24.png 2.5x, icons/close-w-30.png 3x, icons/close-w-30.png 3.5x" draggable="false" />
-			</div>
-		</div>
+    <div id="header">
+        <div id="window-controls">
+            <div class="button" id="min-button">
+                <img class="icon" srcset="icons/min-w-10.png 1x, icons/min-w-12.png 1.25x, icons/min-w-15.png 1.5x, icons/min-w-15.png 1.75x, icons/min-w-20.png 2x, icons/min-w-20.png 2.25x, icons/min-w-24.png 2.5x, icons/min-w-30.png 3x, icons/min-w-30.png 3.5x" draggable="false" />
+            </div>
+            <div class="button" id="max-button">
+                <img class="icon" srcset="icons/max-w-10.png 1x, icons/max-w-12.png 1.25x, icons/max-w-15.png 1.5x, icons/max-w-15.png 1.75x, icons/max-w-20.png 2x, icons/max-w-20.png 2.25x, icons/max-w-24.png 2.5x, icons/max-w-30.png 3x, icons/max-w-30.png 3.5x" draggable="false" />
+            </div>
+            <div class="button" id="restore-button">
+                <img class="icon" srcset="icons/restore-w-10.png 1x, icons/restore-w-12.png 1.25x, icons/restore-w-15.png 1.5x, icons/restore-w-15.png 1.75x, icons/restore-w-20.png 2x, icons/restore-w-20.png 2.25x, icons/restore-w-24.png 2.5x, icons/restore-w-30.png 3x, icons/restore-w-30.png 3.5x" draggable="false" />
+            </div>
+            <div class="button" id="close-button">
+                <img class="icon" srcset="icons/close-w-10.png 1x, icons/close-w-12.png 1.25x, icons/close-w-15.png 1.5x, icons/close-w-15.png 1.75x, icons/close-w-20.png 2x, icons/close-w-20.png 2.25x, icons/close-w-24.png 2.5x, icons/close-w-30.png 3x, icons/close-w-30.png 3.5x" draggable="false" />
+            </div>
+        </div>
         <div id="nav-body-tabs"></div>
         <div id="nav-body-ctrls"></div>
+    </div>
+
         <div id="nav-body-views"></div>
-		
+
         <script>
-	
-		const Store = require('./store.js');
-		const store = new Store({
-		  configName: 'user-preferences'
-		});
-		
-		let  home  = store.get('homepage');
-		
+            const { ipcRenderer } = require('electron');
+            const Store = require('./store.js');
+            const store = new Store({
+                configName: 'user-preferences'
+            });
+
+            let  home  = store.get('homepage');
+
             const enav = new (require('electron-navigation'))({
                 defaultFavicons: true,
                 newTabCallback: (url, options) => {
@@ -46,37 +49,58 @@
                     return {options};
                 }
             });
-			const {clipboard} = require('electron');
-//clipboard.writeText('Example String');
-let clipboardStr = clipboard.readText();
-var length = window.process.argv.length;
-var lastArgument = window.process.argv[length-1]
-	if(lastArgument && lastArgument.indexOf("file:///") == 0) {		
-		console.log(lastArgument);
-		//lastArgument = 'file:///D:/FlashPM/FlashBrowser-master/AS3.html';
-		//lastArgument = 'file:///D:/FlashPM/FlashBrowser-master/noimage.swf';
-		//var path2 = lastArgument.replace(/\\/g, "/");
-		//path2 = 'file:///' + path2;
-		// open a local file, and use a custom icon
-		enav.newTab(lastArgument, {     	
-			title: 'Local file'            
-		})
-	}
-	else if(clipboardStr.indexOf("https://") == 0) {
-	   enav.newTab(clipboardStr);
-	   mainWindow.show();
-	}
-	else if(home){
-		console.log("WE HAGE CUSTOM HOMEPAGE" + home);
-		enav.newTab(home, {icon: "icons/restore-w-24.png"})}
-	else{
-		enav.newTab('https://search.flash.pm/', {icon: "clear"});
-		}
-		
-		
-		
-	
-	
+            const {clipboard} = require('electron');
+            //clipboard.writeText('Example String');
+            let clipboardStr = clipboard.readText();
+            var length = window.process.argv.length;
+            var lastArgument = window.process.argv[length-1]
+            if(lastArgument && lastArgument.indexOf("file:///") == 0) {
+                console.log(lastArgument);
+                //lastArgument = 'file:///D:/FlashPM/FlashBrowser-master/AS3.html';
+                //lastArgument = 'file:///D:/FlashPM/FlashBrowser-master/noimage.swf';
+                //var path2 = lastArgument.replace(/\\/g, "/");
+                //path2 = 'file:///' + path2;
+                // open a local file, and use a custom icon
+                enav.newTab(lastArgument, {
+                    title: 'Local file'
+                })
+            }
+            else if(clipboardStr.indexOf("https://") == 0) {
+                enav.newTab(clipboardStr);
+                mainWindow.show();
+            }
+            else if(home){
+                console.log("WE HAGE CUSTOM HOMEPAGE" + home);
+                enav.newTab(home, {icon: "icons/restore-w-24.png"})}
+            else{
+                enav.newTab('https://search.flash.pm/', {icon: "clear"});
+            }
+
+            function toggleFullscreen(event) {
+                    if(event.key === 'Escape'){
+                        ipcRenderer.send('fs-click');
+                        isFullScreen = false;
+                        header.style.display = oldStyle;
+                    }
+                    if(event.type === 'click'){
+                        ipcRenderer.send('fs-click');
+                    }
+                    if (event.key === 'F11' || event.type === 'click') {
+                        isFullScreen = !isFullScreen;
+                        header.style.display = isFullScreen ? "none" : oldStyle;
+                    }
+            }
+            window.addEventListener('keyup', toggleFullscreen, true);
+
+            let header = document.getElementById('header');
+            let controls = document.getElementById('nav-body-ctrls');
+            let oldStyle = getComputedStyle(header).display;
+            let isFullScreen = false;
+            let fsButton = document.createElement("button");
+            fsButton.id = 'fs-button';
+            fsButton.onclick = toggleFullscreen;
+            controls.appendChild(fsButton);
+
         </script>
     </body>
 </html>
