@@ -185,6 +185,7 @@ app.on('ready',   () => {
 		mainWindow.setFullScreen(!mainWindow.isFullScreen())
 	}
 	globalShortcut.register("F11", toggleWindowFullScreen);
+	globalShortcut.register("Escape", () => mainWindow.setFullScreen(true));
 	ipcMain.on('fs-click', toggleWindowFullScreen);
 
 	globalShortcut.register("CmdOrCtrl+=", () => {
